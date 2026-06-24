@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>alazar.cl</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0D0D10;
+    --bg2: #18181f;
+    --bg3: #22222c;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.16);
+    --gold: #F5C518;
+    --gold2: #d4a80e;
+    --gold-dim: rgba(245,197,24,0.12);
+    --gold-glow: rgba(245,197,24,0.22);
+    --red: #E8384F;
+    --red-dim: rgba(232,56,79,0.15);
+    --text: #FFFFFF;
+    --text2: rgba(255,255,255,0.55);
+    --text3: rgba(255,255,255,0.3);
+    --green: #2BD9A0;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-pill: 999px;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* HEADER */
+  header {
+    width: 100%;
+    max-width: 860px;
+    padding: clamp(1.5rem, 5vw, 2.5rem) 1rem 0;
+    text-align: center;
+  }
+
+  .logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.4rem, 6vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .logo-ball {
+    width: clamp(28px, 5vw, 36px);
+    height: clamp(28px, 5vw, 36px);
+    background: var(--gold);
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--bg);
+    font-size: clamp(14px, 3vw, 18px);
+    font-weight: 700;
+    animation: spin 8s linear infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .tagline {
+    font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+    color: var(--text2);
+    letter-spacing: 0.01em;
+    margin-top: 0.6rem;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+    padding: 0 0.5rem;
+  }
+
+  /* MAIN */
+  main {
+    width: 100%;
+    max-width: 860px;
+    padding: clamp(1rem, 4vw, 2rem) 1rem clamp(2rem, 6vw, 4rem);
+    flex: 1;
+  }
+
+  /* TABS */
+  .tabs-wrap {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+    margin-bottom: 1.5rem;
+    background: var(--bg2);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 5px;
+  }
+
+  .tab {
+    padding: 0.55rem 0.4rem;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: transparent;
+    color: var(--text2);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(0.65rem, 2.2vw, 0.78rem);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    text-align: center;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+    touch-action: manipulation;
+  }
+
+  /* Last tab (7th) spans 4 columns on its own row — centered */
+  .tab:last-child {
+    grid-column: 4 / 5;
+  }
+
+  .tab:hover { background: var(--bg3); color: var(--text); }
+  .tab.active { background: var(--gold); color: var(--bg); }
+
+  /* GAME PANEL */
+  .game-panel { display: none; }
+  .game-panel.active { display: block; }
+
+  .game-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .game-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.2rem, 5vw, 1.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .game-desc {
+    font-size: clamp(0.75rem, 2.5vw, 0.82rem);
+    color: var(--text2);
+    margin-top: 0.2rem;
+    line-height: 1.5;
+  }
+
+  .game-badge {
+    display: inline-flex;
+    align-items: center;
+    background: var(--gold-dim);
+    border: 0.5px solid rgba(245,197,24,0.3);
+    border-radius: var(--radius-pill);
+    padding: 0.3rem 0.8rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--gold);
+    white-space: nowrap;
+    flex-shrink: 0;
+    align-self: flex-start;
+  }
+
+  /* NUMBER GRID */
+  .grid-container {
+    background: var(--bg2);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .num-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(clamp(40px, 10vw, 52px), 1fr));
+    gap: clamp(5px, 1.5vw, 8px);
+  }
+
+  .num-btn {
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 1.5px solid var(--border2);
+    background: var(--bg3);
+    color: var(--text2);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(0.8rem, 3vw, 1rem);
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.12s, background 0.12s, color 0.12s, border-color 0.12s, box-shadow 0.12s;
+    display: flex; align-items: center; justify-content: center;
+    touch-action: manipulation;
+    min-width: 0;
+  }
+
+  .num-btn:hover {
+    border-color: var(--gold);
+    color: var(--text);
+    background: var(--bg2);
+  }
+
+  @media (hover: hover) {
+    .num-btn:hover { transform: scale(1.1); }
+  }
+
+  .num-btn.selected {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--bg);
+    transform: scale(1.06);
+    box-shadow: 0 0 10px var(--gold-glow);
+  }
+
+  .num-btn:active { transform: scale(0.94); }
+  .num-btn.selected:active { transform: scale(0.98); }
+
+  /* Lucky numbers */
+  .num-btn.lucky {
+    border-color: var(--red);
+    color: var(--red);
+    background: var(--red-dim);
+  }
+
+  .num-btn.lucky:hover { background: rgba(232,56,79,0.25); }
+
+  .num-btn.lucky.selected {
+    background: var(--red);
+    border-color: var(--red);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(232,56,79,0.35);
+  }
+
+  /* Section label */
+  .grid-section-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 0.75rem;
+    margin-top: 1rem;
+  }
+  .grid-section-label:first-child { margin-top: 0; }
+
+  /* LOTO 3 */
+  .loto3-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: clamp(1rem, 4vw, 2rem) 1rem;
+    gap: 1.25rem;
+  }
+
+  .loto3-display {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(3rem, 14vw, 5rem);
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+    background: var(--bg3);
+    border-radius: var(--radius);
+    padding: 1.25rem 1rem;
+    border: 1px solid var(--border2);
+    transition: color 0.2s;
+  }
+
+  .loto3-display.empty { color: var(--border2); }
+
+  .loto3-input-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+
+  /* COUNTER BAR */
+  .counter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .counter-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text2);
+    white-space: nowrap;
+  }
+
+  .counter-text span {
+    color: var(--gold);
+    font-size: 1.2rem;
+  }
+
+  .progress-wrap {
+    flex: 1;
+    height: 4px;
+    background: var(--bg3);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 99px;
+    transition: width 0.3s;
+  }
+
+  .progress-fill.complete { background: var(--green); }
+
+  /* RESULT PANEL */
+  .result-panel {
+    background: var(--bg2);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    min-height: 68px;
+  }
+
+  .result-panel-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 0.65rem;
+  }
+
+  .result-balls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .result-ball {
+    width: clamp(36px, 9vw, 44px);
+    height: clamp(36px, 9vw, 44px);
+    border-radius: 50%;
+    background: var(--gold);
+    color: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(0.75rem, 2.5vw, 0.95rem);
+    font-weight: 700;
+    animation: pop 0.2s ease-out;
+    flex-shrink: 0;
+  }
+
+  .result-ball.lucky-result { background: var(--red); color: #fff; }
+
+  .result-separator {
+    font-size: 1.1rem;
+    color: var(--text3);
+    margin: 0 2px;
+  }
+
+  @keyframes pop {
+    0% { transform: scale(0.6); opacity: 0; }
+    70% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .result-empty {
+    color: var(--text3);
+    font-size: 0.82rem;
+    font-style: italic;
+  }
+
+  /* BUTTONS */
+  .btn-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0.7rem 1.1rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border2);
+    background: transparent;
+    color: var(--text2);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(0.8rem, 2.5vw, 0.85rem);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s;
+    touch-action: manipulation;
+    min-height: 44px;
+  }
+
+  .btn:hover { background: var(--bg3); color: var(--text); }
+  .btn:active { transform: scale(0.97); }
+
+  .btn.primary {
+    background: var(--gold);
+    color: var(--bg);
+    border-color: var(--gold);
+    font-weight: 700;
+    flex: 1;
+  }
+
+  .btn.primary:hover { background: var(--gold2); border-color: var(--gold2); }
+
+  .btn.danger {
+    border-color: rgba(232,56,79,0.3);
+    color: var(--red);
+  }
+
+  .btn.danger:hover { background: var(--red-dim); border-color: var(--red); }
+
+  /* TOAST */
+  .toast {
+    font-size: 0.78rem;
+    color: var(--red);
+    min-height: 20px;
+    margin-top: 0.65rem;
+    font-weight: 500;
+    text-align: center;
+  }
+
+  /* FOOTER */
+  footer {
+    width: 100%;
+    max-width: 860px;
+    padding: 1rem 1.25rem 2rem;
+    text-align: center;
+    font-size: clamp(0.65rem, 2vw, 0.72rem);
+    color: var(--text3);
+    line-height: 1.7;
+    border-top: 0.5px solid var(--border);
+    margin-top: auto;
+  }
+
+  /* SVG icons */
+  .icon { width: 15px; height: 15px; display: inline-block; vertical-align: middle; flex-shrink: 0; }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .logo-ball { animation: none; }
+    .num-btn, .btn { transition: none; }
+    @keyframes pop { from { opacity: 1; transform: scale(1); } }
+  }
+
+  /* TABLET 500–700px */
+  @media (max-width: 700px) {
+    .tabs-wrap { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  /* MOBILE ≤480px */
+  @media (max-width: 480px) {
+    .tabs-wrap {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4px;
+    }
+    .tab:last-child { grid-column: auto; }
+    .btn-row { flex-direction: column; }
+    .btn { width: 100%; }
+    .btn.primary { flex: none; }
+    .game-header { flex-direction: column; gap: 0.5rem; }
+    .loto3-input-row { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <span class="logo-ball">★</span>
+    alazar.cl
+  </div>
+  <div class="tagline">Tus números los elige tu dispositivo, no el que organiza el sorteo. Azar real. Sin intermediarios.</div>
+</header>
+
+<main>
+  <div class="tabs-wrap" role="tablist">
+    <button class="tab active" role="tab" onclick="switchGame('kino')">Kino</button>
+    <button class="tab" role="tab" onclick="switchGame('loto')">Loto</button>
+    <button class="tab" role="tab" onclick="switchGame('kino5')">Kino 5</button>
+    <button class="tab" role="tab" onclick="switchGame('alfin')">Al Fin le Achunte</button>
+    <button class="tab" role="tab" onclick="switchGame('loto3')">Loto 3</button>
+    <button class="tab" role="tab" onclick="switchGame('loto4')">Loto 4</button>
+    <button class="tab" role="tab" onclick="switchGame('racha')">Racha</button>
+  </div>
+
+  <!-- KINO -->
+  <div id="panel-kino" class="game-panel active">
+    <div class="game-header">
+      <div>
+        <div class="game-title">Kino</div>
+        <div class="game-desc">Selecciona 14 números del 1 al 25</div>
+      </div>
+      <div class="game-badge">14 de 25</div>
+    </div>
+    <div class="counter-bar">
+      <div class="counter-text"><span id="kino-count">0</span> / 14</div>
+      <div class="progress-wrap"><div class="progress-fill" id="kino-progress" style="width:0%"></div></div>
+    </div>
+    <div class="grid-container">
+      <div class="num-grid" id="kino-grid"></div>
+    </div>
+    <div class="result-panel">
+      <div class="result-panel-label">Tu jugada</div>
+      <div class="result-balls" id="kino-result"><span class="result-empty">Aún sin selección</span></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn primary" onclick="randomGame('kino')">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+        Generar al azar
+      </button>
+      <button class="btn danger" onclick="clearGame('kino')">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+        Limpiar
+      </button>
+    </div>
+    <div class="toast" id="kino-toast"></div>
+  </div>
+
+  <!-- LOTO -->
+  <div id="panel-loto" class="game-panel">
+    <div class="game-header">
+      <div>
+        <div class="game-title">Loto</div>
+        <div class="game-desc">Selecciona 6 números del 1 al 42</div>
+      </div>
+      <div class="game-badge">6 de 42</div>
+    </div>
+    <div class="counter-bar">
+      <div class="counter-text"><span id="loto-count">0</span> / 6</div>
+      <div class="progress-wrap"><div class="progress-fill" id="loto-progress" style="width:0%"></div></div>
+    </div>
+    <div class="grid-container">
+      <div class="num-grid" id="loto-grid"></div>
+    </div>
+    <div class="result-panel">
+      <div class="result-panel-label">Tu jugada</div>
+      <div class="result-balls" id="loto-result"><span class="result-empty">Aún sin selección</span></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn primary" onclick="randomGame('loto')">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+        Generar al azar
+      </button>
+      <button class="btn danger" onclick="clearGame('loto')">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+        Limpiar
+      </button>
+    </div>
+    <div class="toast" id="loto-toast"></div>
+  </div>
+
+  <!-- KINO 5 -->
+  <div id="panel-kino5" class="game-panel">
+    <div class="game-header">
+      <div>
+        <div class="game-title">Kino 5</div>
+        <div class="game-desc">Selecciona 5 números del 1 al 36</div>
+      </div>
+      <div class="game-badge">5 de 36</div>
+    </div>
+    <div class="counter-bar">
+      <div class="counter-text"><span id="kino5-count">0</span> / 5</div>
+      <div class="progress-wrap"><div class="progress-fill" id="kino5-progress" style="width:0%"></div></div>
+    </div>
+    <div class="grid-container">
+      <div class="num-grid" id="kino5-grid"></div>
+    </div>
+    <div class="result-panel">
+      <div class="result-panel-label">Tu jugada</div>
+      <div class="result-balls" id="kino5-result"><span class="result-empty">Aún sin selección</span></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn primary" onclick="randomGame('kino5')">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+        Generar al azar
+      </button>
+      <button class="btn danger" onclick="clearGame('kino5')">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+        Limpiar
+      </button>
+    </div>
+    <div class="toast" id="kino5-toast"></div>
+  </div>
+
+  <!-- AL FIN LE ACHUNTE -->
+  <div id="panel-alfin" class="game-panel">
+    <div class="game-header">
+      <div>
+        <div class="game-title">Al Fin le Achunte</div>
+        <div class="game-desc">7 números del 1 al 30 + 1 número de la suerte del 1 al 3</div>
+      </div>
+      <div class="game-badge">7 de 30 + suerte</div>
+    </div>
+    <div class="counter-bar">
+      <div class="counter-text"><span id="alfin-count">0</span> / 7 + <span id="alfin-lucky-count" style="color:var(--red)">0</span> suerte</div>
+      <div class="progress-wrap"><div class="progress-fill" id="alfin-progress" style="width:0%"></div></div>
+    </div>
+    <div class="grid-container">
+      <div class="grid-section-label">Números principales</div>
+      <div class="num-grid" id="alfin-grid"></div>
+      <div class="grid-section-label" style="color:var(--red);opacity:0.8">Número de la suerte</div>
+      <div class="num-grid" id="alfin-lucky-grid" style="grid-template-columns: repeat(3, 52px); justify-content: center; margin-top: 0.5rem;"></div>
+    </div>
+    <div class="result-panel">
+      <div class="result-panel-label">Tu jugada</div>
+      <div class="result-balls" id="alfin-result"><span class="result-empty">Aún sin selección</span></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn primary" onclick="randomGame('alfin')">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+        Generar al azar
+      </button>
+      <button class="btn danger" onclick="clearGame('alfin')">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+        Limpiar
+      </button>
+    </div>
+    <div class="toast" id="alfin-toast"></div>
+  </div>
+
+  <!-- LOTO 3 -->
+  <div id="panel-loto3" class="game-panel">
+    <div class="game-header">
+      <div>
+        <div class="game-title">Loto 3</div>
+        <div class="game-desc">Un número de 3 dígitos entre 000 y 999</div>
+      </div>
+      <div class="game-badge">000 – 999</div>
+    </div>
+    <div class="grid-container">
+      <div class="loto3-wrap">
+        <div class="loto3-display empty" id="loto3-display">???</div>
+        <div class="loto3-input-row">
+          <input type="number" min="0" max="999" placeholder="Ingresa 000–999" id="loto3-input"
+            style="background:var(--bg3); border:1px solid var(--border2); border-radius:var(--radius-sm); color:var(--text); font-family:'Space Grotesk',sans-serif; font-size:1rem; padding:0.6rem 1rem; width:180px; text-align:center; outline:none;">
+          <button class="btn" onclick="setLoto3Manual()">Confirmar</button>
+        </div>
+      </div>
+    </div>
+    <div class="result-panel">
+      <div class="result-panel-label">Tu número</div>
+      <div class="result-balls" id="loto3-result"><span class="result-empty">Aún sin selección</span></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn primary" onclick="randomLoto3()">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+        Generar al azar
+      </button>
+      <button class="btn danger" onclick="clearLoto3()">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+        Limpiar
+      </button>
+    </div>
+    <div class="toast" id="loto3-toast"></div>
+  </div>
+
+  <!-- LOTO 4 -->
+  <div id="panel-loto4" class="game-panel">
+    <div class="game-header">
+      <div>
+        <div class="game-title">Loto 4</div>
+        <div class="game-desc">Selecciona 4 números del 1 al 23</div>
+      </div>
+      <div class="game-badge">4 de 23</div>
+    </div>
+    <div class="counter-bar">
+      <div class="counter-text"><span id="loto4-count">0</span> / 4</div>
+      <div class="progress-wrap"><div class="progress-fill" id="loto4-progress" style="width:0%"></div></div>
+    </div>
+    <div class="grid-container">
+      <div class="num-grid" id="loto4-grid"></div>
+    </div>
+    <div class="result-panel">
+      <div class="result-panel-label">Tu jugada</div>
+      <div class="result-balls" id="loto4-result"><span class="result-empty">Aún sin selección</span></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn primary" onclick="randomGame('loto4')">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+        Generar al azar
+      </button>
+      <button class="btn danger" onclick="clearGame('loto4')">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+        Limpiar
+      </button>
+    </div>
+    <div class="toast" id="loto4-toast"></div>
+  </div>
+
+  <!-- RACHA -->
+  <div id="panel-racha" class="game-panel">
+    <div class="game-header">
+      <div>
+        <div class="game-title">Racha</div>
+        <div class="game-desc">Selecciona 10 números del 1 al 20</div>
+      </div>
+      <div class="game-badge">10 de 20</div>
+    </div>
+    <div class="counter-bar">
+      <div class="counter-text"><span id="racha-count">0</span> / 10</div>
+      <div class="progress-wrap"><div class="progress-fill" id="racha-progress" style="width:0%"></div></div>
+    </div>
+    <div class="grid-container">
+      <div class="num-grid" id="racha-grid" style="grid-template-columns: repeat(auto-fill, minmax(62px, 1fr));"></div>
+    </div>
+    <div class="result-panel">
+      <div class="result-panel-label">Tu jugada</div>
+      <div class="result-balls" id="racha-result"><span class="result-empty">Aún sin selección</span></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn primary" onclick="randomGame('racha')">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+        Generar al azar
+      </button>
+      <button class="btn danger" onclick="clearGame('racha')">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+        Limpiar
+      </button>
+    </div>
+    <div class="toast" id="racha-toast"></div>
+  </div>
+
+</main>
+
+<footer>
+  alazar.cl no almacena combinaciones ni datos de ningún tipo. Todo ocurre en tu dispositivo y desaparece cuando cierras la página.<br>
+  Solo para uso recreativo · La probabilidad no tiene memoria, y nosotros tampoco.
+</footer>
+
+<script>
+  // Game config
+  const GAMES = {
+    kino:  { max: 25, pick: 14, lucky: false },
+    loto:  { max: 42, pick: 6,  lucky: false },
+    kino5: { max: 36, pick: 5,  lucky: false },
+    alfin: { max: 30, pick: 7,  lucky: true, luckyMax: 3, luckyPick: 1 },
+    loto4: { max: 23, pick: 4,  lucky: false },
+    racha: { max: 20, pick: 10, lucky: false },
+  };
+
+  const state = {};
+  Object.keys(GAMES).forEach(g => {
+    state[g] = { selected: new Set(), luckySelected: new Set() };
+  });
+
+  // Fisher-Yates
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function buildGrid(gameId) {
+    const g = GAMES[gameId];
+    const grid = document.getElementById(gameId + '-grid');
+    grid.innerHTML = '';
+    for (let i = 1; i <= g.max; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'num-btn';
+      btn.textContent = i;
+      btn.dataset.n = i;
+      btn.setAttribute('aria-label', 'Número ' + i);
+      btn.onclick = () => toggleNum(gameId, i, btn, false);
+      grid.appendChild(btn);
+    }
+    if (g.lucky) {
+      const lgrid = document.getElementById(gameId + '-lucky-grid');
+      lgrid.innerHTML = '';
+      for (let i = 1; i <= g.luckyMax; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'num-btn lucky';
+        btn.textContent = i;
+        btn.dataset.n = i;
+        btn.setAttribute('aria-label', 'Número de la suerte ' + i);
+        btn.onclick = () => toggleNum(gameId, i, btn, true);
+        lgrid.appendChild(btn);
+      }
+    }
+  }
+
+  function toggleNum(gameId, n, btn, isLucky) {
+    const g = GAMES[gameId];
+    const sel = isLucky ? state[gameId].luckySelected : state[gameId].selected;
+    const maxPick = isLucky ? g.luckyPick : g.pick;
+
+    if (sel.has(n)) {
+      sel.delete(n);
+      btn.classList.remove('selected');
+    } else {
+      if (sel.size >= maxPick) {
+        showToast(gameId, isLucky
+          ? 'Solo puedes elegir ' + maxPick + ' número de la suerte.'
+          : 'Ya tienes ' + maxPick + ' números seleccionados.');
+        return;
+      }
+      sel.add(n);
+      btn.classList.add('selected');
+    }
+    clearToast(gameId);
+    updateCounter(gameId);
+    renderResult(gameId);
+  }
+
+  function updateCounter(gameId) {
+    const g = GAMES[gameId];
+    const count = state[gameId].selected.size;
+    const el = document.getElementById(gameId + '-count');
+    if (el) el.textContent = count;
+
+    if (g.lucky) {
+      const lc = document.getElementById(gameId + '-lucky-count');
+      if (lc) lc.textContent = state[gameId].luckySelected.size;
+    }
+
+    const prog = document.getElementById(gameId + '-progress');
+    if (prog) {
+      const pct = Math.round(count / g.pick * 100);
+      prog.style.width = pct + '%';
+      prog.classList.toggle('complete', count === g.pick);
+    }
+  }
+
+  function renderResult(gameId) {
+    const g = GAMES[gameId];
+    const el = document.getElementById(gameId + '-result');
+    const sorted = [...state[gameId].selected].sort((a, b) => a - b);
+    const luckySorted = g.lucky ? [...state[gameId].luckySelected].sort((a, b) => a - b) : [];
+
+    if (sorted.length === 0 && luckySorted.length === 0) {
+      el.innerHTML = '<span class="result-empty">Aún sin selección</span>';
+      return;
+    }
+
+    let html = sorted.map(n => `<div class="result-ball">${n}</div>`).join('');
+    if (g.lucky && luckySorted.length > 0) {
+      html += '<span class="result-separator">+</span>';
+      html += luckySorted.map(n => `<div class="result-ball lucky-result">${n}</div>`).join('');
+    }
+    el.innerHTML = html;
+  }
+
+  function randomGame(gameId) {
+    clearGame(gameId);
+    const g = GAMES[gameId];
+
+    const pool = Array.from({length: g.max}, (_, i) => i + 1);
+    const picks = shuffle(pool).slice(0, g.pick);
+    picks.forEach(n => {
+      state[gameId].selected.add(n);
+    });
+
+    if (g.lucky) {
+      const lpool = Array.from({length: g.luckyMax}, (_, i) => i + 1);
+      const lpicks = shuffle(lpool).slice(0, g.luckyPick);
+      lpicks.forEach(n => state[gameId].luckySelected.add(n));
+    }
+
+    syncGridToState(gameId);
+    updateCounter(gameId);
+    renderResult(gameId);
+  }
+
+  function clearGame(gameId) {
+    state[gameId].selected.clear();
+    state[gameId].luckySelected.clear();
+    document.querySelectorAll('#' + gameId + '-grid .num-btn').forEach(b => b.classList.remove('selected'));
+    const lg = document.getElementById(gameId + '-lucky-grid');
+    if (lg) lg.querySelectorAll('.num-btn').forEach(b => b.classList.remove('selected'));
+    clearToast(gameId);
+    updateCounter(gameId);
+    renderResult(gameId);
+  }
+
+  function syncGridToState(gameId) {
+    const g = GAMES[gameId];
+    document.querySelectorAll('#' + gameId + '-grid .num-btn').forEach(b => {
+      b.classList.toggle('selected', state[gameId].selected.has(parseInt(b.dataset.n)));
+    });
+    if (g.lucky) {
+      const lg = document.getElementById(gameId + '-lucky-grid');
+      if (lg) lg.querySelectorAll('.num-btn').forEach(b => {
+        b.classList.toggle('selected', state[gameId].luckySelected.has(parseInt(b.dataset.n)));
+      });
+    }
+  }
+
+  // LOTO 3
+  let loto3Value = null;
+
+  function randomLoto3() {
+    loto3Value = Math.floor(Math.random() * 1000);
+    renderLoto3();
+  }
+
+  function setLoto3Manual() {
+    const inp = document.getElementById('loto3-input');
+    const v = parseInt(inp.value);
+    if (isNaN(v) || v < 0 || v > 999) {
+      showToast('loto3', 'Ingresa un número entre 000 y 999.');
+      return;
+    }
+    loto3Value = v;
+    renderLoto3();
+    clearToast('loto3');
+  }
+
+  function clearLoto3() {
+    loto3Value = null;
+    document.getElementById('loto3-input').value = '';
+    renderLoto3();
+    clearToast('loto3');
+  }
+
+  function renderLoto3() {
+    const display = document.getElementById('loto3-display');
+    const result = document.getElementById('loto3-result');
+    if (loto3Value === null) {
+      display.textContent = '???';
+      display.classList.add('empty');
+      result.innerHTML = '<span class="result-empty">Aún sin selección</span>';
+    } else {
+      const str = String(loto3Value).padStart(3, '0');
+      display.textContent = str;
+      display.classList.remove('empty');
+      result.innerHTML = str.split('').map(d =>
+        `<div class="result-ball">${d}</div>`
+      ).join('<span class="result-separator">-</span>');
+    }
+  }
+
+  // LOTO 4 — handled by generic grid system above
+
+  // TABS
+  let currentGame = 'kino';
+
+  function switchGame(gameId) {
+    document.querySelectorAll('.game-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('panel-' + gameId).classList.add('active');
+    document.querySelectorAll('.tab').forEach(t => {
+      if (t.textContent.trim().toLowerCase().replace(/\s+/g, '') ===
+          {kino:'kino',loto:'loto',kino5:'kino5',alfin:'alfinleachunte',loto3:'loto3',loto4:'loto4',racha:'racha'}[gameId]) {
+        t.classList.add('active');
+      }
+    });
+    // Match by onclick attribute as fallback
+    document.querySelectorAll('.tab').forEach(t => {
+      if (t.getAttribute('onclick') === "switchGame('" + gameId + "')") t.classList.add('active');
+    });
+    currentGame = gameId;
+  }
+
+  // TOASTS
+  const toastTimers = {};
+
+  function showToast(gameId, msg) {
+    const el = document.getElementById(gameId + '-toast');
+    if (!el) return;
+    el.textContent = msg;
+    clearTimeout(toastTimers[gameId]);
+    toastTimers[gameId] = setTimeout(() => clearToast(gameId), 2800);
+  }
+
+  function clearToast(gameId) {
+    const el = document.getElementById(gameId + '-toast');
+    if (el) el.textContent = '';
+  }
+
+  // INIT
+  ['kino', 'loto', 'kino5', 'loto4', 'racha'].forEach(buildGrid);
+  buildGrid('alfin');
+  renderLoto3();
+</script>
+</body>
+</html>
